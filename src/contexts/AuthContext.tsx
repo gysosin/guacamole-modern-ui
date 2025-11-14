@@ -2,8 +2,8 @@ import { PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { AuthContext, FALLBACK_USER, type AuthUser } from './auth-context.core'
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true)
-  const [user, setUser] = useState<AuthUser | null>(FALLBACK_USER)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState<AuthUser | null>(null)
 
   const login = useCallback(() => {
     setUser(FALLBACK_USER)

@@ -20,8 +20,8 @@ export const FALLBACK_USER: AuthUser = {
 }
 
 export const createDefaultAuthValue = (): AuthContextValue => ({
-  isAuthenticated: true,
-  user: FALLBACK_USER,
+  isAuthenticated: false,
+  user: null,
   login: () => undefined,
   logout: () => undefined,
 })
