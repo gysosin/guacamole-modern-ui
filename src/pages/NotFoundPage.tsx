@@ -46,3 +46,5 @@ const createStyles = (tokens: ThemeTokens): Record<string, CSSProperties> => ({
     fontWeight: tokens.typography.weights.medium,
   },
 })
+
+export default NotFoundPage

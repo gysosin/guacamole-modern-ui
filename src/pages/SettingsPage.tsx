@@ -67,3 +67,5 @@ const createStyles = (tokens: ThemeTokens): Record<string, CSSProperties> => ({
     fontSize: tokens.typography.sizes.sm,
   },
 })
+
+export default SettingsPage

@@ -61,3 +61,5 @@ const createStyles = (tokens: ThemeTokens): Record<string, CSSProperties> => ({
     fontSize: tokens.typography.sizes.md,
   },
 })
+
+export default SessionsPage

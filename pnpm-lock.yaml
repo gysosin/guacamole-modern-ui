@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  react-bits:
+    hash: 1292fe609d8c5180831a7be626b57909a103fb46b39254c15bca0b8087554039
+    path: patches/react-bits.patch
+
 importers:
 
   .:
@@ -11,12 +16,15 @@ importers:
       axios:
         specifier: ^1.13.2
         version: 1.13.2
+      create-react-class:
+        specifier: ^15.7.0
+        version: 15.7.0
       react:
         specifier: ^19.2.0
         version: 19.2.0
       react-bits:
         specifier: ^1.0.5
-        version: 1.0.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 1.0.5(patch_hash=1292fe609d8c5180831a7be626b57909a103fb46b39254c15bca0b8087554039)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-dom:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
@@ -2828,7 +2836,7 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-bits@1.0.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-bits@1.0.5(patch_hash=1292fe609d8c5180831a7be626b57909a103fb46b39254c15bca0b8087554039)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@types/prop-types': 15.7.15
       '@types/react': 16.14.67
