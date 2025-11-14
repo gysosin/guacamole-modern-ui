@@ -1,12 +1,19 @@
 import { useNavigate } from 'react-router-dom'
 import { Text, View } from 'react-bits'
 import { useTheme } from '@hooks/useTheme'
+import { useAuth } from '@hooks/useAuth'
 import { AuthPageShell } from '@components/auth/AuthPageShell'
 import { MfaVerification } from '@components/auth/MfaVerification'
 
 const MfaPage = () => {
   const navigate = useNavigate()
   const { tokens } = useTheme()
+  const { login } = useAuth()
+
+  const handleVerify = () => {
+    login()
+    navigate('/dashboard')
+  }
 
   return (
     <AuthPageShell
@@ -38,7 +45,7 @@ const MfaPage = () => {
       <MfaVerification
         initialSeconds={30}
         method="totp"
-        onVerify={() => navigate('/dashboard')}
+        onVerify={handleVerify}
         onResend={() => console.info('resend code')}
         onUseBackup={() => navigate('/auth/reset')}
       />
