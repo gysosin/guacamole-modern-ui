@@ -54,6 +54,29 @@ const createTokens = (): AuthTokens => ({
   issuedAt: Date.now(),
 })
 
+const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+
+const getRandomBytes = (length: number) => {
+  const cryptoObj =
+    globalThis.crypto ?? (globalThis as typeof globalThis & { msCrypto?: Crypto }).msCrypto
+  if (cryptoObj?.getRandomValues) {
+    return cryptoObj.getRandomValues(new Uint8Array(length))
+  }
+
+  const fallback = new Uint8Array(length)
+  for (let i = 0; i < length; i += 1) {
+    fallback[i] = Math.floor(Math.random() * 256)
+  }
+  return fallback
+}
+
+const generateSecret = (length = 32) => {
+  const bytes = getRandomBytes(length)
+  return Array.from(bytes)
+    .map((value) => BASE32_ALPHABET[value % BASE32_ALPHABET.length])
+    .join('')
+}
+
 const generateBackupCodes = () =>
   Array.from({ length: 6 }).map(() => Math.random().toString(36).substring(2, 8).toUpperCase())
 
@@ -106,7 +129,7 @@ const tokenStore = (() => {
 
 const mockState = {
   tokens: createTokens(),
-  totpSecret: authenticator.generateSecret(),
+  totpSecret: generateSecret(),
   backupCodes: generateBackupCodes(),
   rateLimits: {} as Record<string, RateLimitRecord>,
   passwordReset: {} as Record<string, PasswordResetRecord>,
