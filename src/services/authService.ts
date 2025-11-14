@@ -17,6 +17,7 @@ import type {
 const STORAGE_KEY = 'guacmod:auth:tokens'
 const NETWORK_DELAY_MS = 260
 const PASSWORD_SECRET = 'Str0ngPass!'
+const DEV_SKIP_MFA = import.meta.env.DEV
 
 authenticator.options = { digits: 6, step: 30 }
 
@@ -200,6 +201,13 @@ const mockAdapter: AxiosAdapter = async (config) => {
       limit.blockedUntil = Date.now() + Math.min(60000, limit.failures * 5000)
       mockState.rateLimits[email] = limit
       return error('Invalid credentials.', 401)
+    }
+
+    if (DEV_SKIP_MFA) {
+      const tokens = createTokens()
+      mockState.tokens = tokens
+      tokenStore.setTokens(tokens)
+      return response<MfaResponse>({ requiresMfa: false, tokens, user: initialUser })
     }
 
     mockState.challenge = {
