@@ -11,6 +11,6 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'json-summary'],
     },
-    threads: false,
+    pool: 'threads',
   },
 })

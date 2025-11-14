@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { useMemo, useState } from 'react'
 import { View, Text } from 'react-bits'
 import { useLocation } from 'react-router-dom'
-import { useAuth } from '@contexts/AuthContext'
+import { useAuth } from '@hooks/useAuth'
 import { useTheme } from '@hooks/useTheme'
 import { useMediaQuery } from '@hooks/useMediaQuery'
 import { primaryRoutes } from '@utils/navigation'
@@ -22,7 +22,8 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const styles = useMemo(() => createStyles(tokens, isNarrow), [tokens, isNarrow])
 
-  const activeRoute = primaryRoutes.find((route) => location.pathname.startsWith(route.path)) ?? primaryRoutes[0]
+  const activeRoute =
+    primaryRoutes.find((route) => location.pathname.startsWith(route.path)) ?? primaryRoutes[0]
 
   const handleSidebarToggle = () => setSidebarOpen((prev) => !prev)
   const handleNavigation = () => {
