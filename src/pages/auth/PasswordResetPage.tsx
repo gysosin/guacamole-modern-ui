@@ -40,8 +40,8 @@ const PasswordResetPage = () => {
       <PasswordResetFlow
         onRequestChallenge={(email) => requestPasswordReset(email)}
         onVerifyChallenge={({ email, code }) => verifyPasswordReset({ email, code })}
-        onCompleteReset={(payload) => {
-          completePasswordReset(payload)
+        onCompleteReset={async (payload) => {
+          await completePasswordReset(payload)
           navigate('/auth/login')
         }}
       />
