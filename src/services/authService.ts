@@ -1,10 +1,6 @@
-import axios, {
-  AxiosAdapter,
-  AxiosError,
-  type AxiosInstance,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-} from 'axios'
+import axios from 'axios'
+import { AxiosError } from 'axios'
+import type { AxiosAdapter, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { authenticator } from 'otplib'
 import { toDataURL } from 'qrcode'
 import type {
