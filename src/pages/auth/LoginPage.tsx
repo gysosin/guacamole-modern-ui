@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Text, View } from 'react-bits'
 import { useTheme } from '@hooks/useTheme'
+import { useAuth } from '@hooks/useAuth'
 import { AuthPageShell } from '@components/auth/AuthPageShell'
 import { LoginForm, type LoginFormValues } from '@components/auth/LoginForm'
 import { MfaVerification } from '@components/auth/MfaVerification'
@@ -8,10 +10,26 @@ import { MfaVerification } from '@components/auth/MfaVerification'
 const LoginPage = () => {
   const navigate = useNavigate()
   const { tokens } = useTheme()
+  const { login, isPending, rateLimit } = useAuth()
+  const [formError, setFormError] = useState<string | null>(null)
+
+  const rateLimitMessage = rateLimit?.isLocked
+    ? `Too many attempts. Try again in ${rateLimit.retryAfterSeconds}s.`
+    : null
 
   const handleSubmit = async (values: LoginFormValues) => {
-    console.info('Login submitted', values)
-    navigate('/auth/mfa')
+    setFormError(null)
+    try {
+      const challenge = await login(values)
+      if (challenge) {
+        navigate('/auth/mfa')
+        return
+      }
+      navigate('/dashboard')
+    } catch (error) {
+      console.error('Login failed', error)
+      setFormError((error as Error).message ?? 'Unable to sign in at this time.')
+    }
   }
 
   return (
@@ -44,7 +62,12 @@ const LoginPage = () => {
         </View>
       }
     >
-      <LoginForm onSubmit={handleSubmit} onForgotPasswordNavigate={() => navigate('/auth/reset')} />
+      <LoginForm
+        isSubmitting={isPending}
+        submissionError={formError ?? rateLimitMessage}
+        onSubmit={handleSubmit}
+        onForgotPasswordNavigate={() => navigate('/auth/reset')}
+      />
     </AuthPageShell>
   )
 }

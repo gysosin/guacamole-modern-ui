@@ -1,12 +1,14 @@
 import { Text, View } from 'react-bits'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@hooks/useTheme'
+import { useAuth } from '@hooks/useAuth'
 import { AuthPageShell } from '@components/auth/AuthPageShell'
 import { PasswordResetFlow } from '@components/auth/PasswordResetFlow'
 
 const PasswordResetPage = () => {
   const { tokens } = useTheme()
   const navigate = useNavigate()
+  const { requestPasswordReset, verifyPasswordReset, completePasswordReset } = useAuth()
 
   return (
     <AuthPageShell
@@ -36,9 +38,12 @@ const PasswordResetPage = () => {
       }
     >
       <PasswordResetFlow
-        onRequestChallenge={(email) => console.info('Requesting reset for', email)}
-        onVerifyChallenge={(payload) => console.info('Verifying code', payload)}
-        onCompleteReset={() => navigate('/auth/login')}
+        onRequestChallenge={(email) => requestPasswordReset(email)}
+        onVerifyChallenge={({ email, code }) => verifyPasswordReset({ email, code })}
+        onCompleteReset={(payload) => {
+          completePasswordReset(payload)
+          navigate('/auth/login')
+        }}
       />
     </AuthPageShell>
   )

@@ -4,14 +4,15 @@ import { useTheme } from '@hooks/useTheme'
 import { useAuth } from '@hooks/useAuth'
 import { AuthPageShell } from '@components/auth/AuthPageShell'
 import { MfaVerification } from '@components/auth/MfaVerification'
+import { MfaSetupWizard } from '@components/auth/MfaSetupWizard'
 
 const MfaPage = () => {
   const navigate = useNavigate()
   const { tokens } = useTheme()
-  const { login } = useAuth()
+  const { verifyMfa, resendTotp, mfaChallenge } = useAuth()
 
-  const handleVerify = () => {
-    login()
+  const handleVerify = async (code: string) => {
+    await verifyMfa(code)
     navigate('/dashboard')
   }
 
@@ -39,14 +40,15 @@ const MfaPage = () => {
             Request backup codes from your administrator or switch to registered FIDO2 keys for
             phishing-resistant MFA.
           </Text>
+          <MfaSetupWizard />
         </View>
       }
     >
       <MfaVerification
-        initialSeconds={30}
-        method="totp"
+        initialSeconds={mfaChallenge?.expiresIn ?? 30}
+        method={mfaChallenge?.method ?? 'totp'}
         onVerify={handleVerify}
-        onResend={() => console.info('resend code')}
+        onResend={resendTotp}
         onUseBackup={() => navigate('/auth/reset')}
       />
     </AuthPageShell>
