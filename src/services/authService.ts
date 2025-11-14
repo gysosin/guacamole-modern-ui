@@ -145,8 +145,6 @@ const buildDevInfo = (): DevAuthInfo => ({
   backupCodes: [...mockState.backupCodes],
 })
 
-tokenStore.setTokens(mockState.tokens)
-
 const mockAdapter: AxiosAdapter = async (config) => {
   await later(NETWORK_DELAY_MS)
   const method = (config.method ?? 'get').toLowerCase()

@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [rateLimit, setRateLimit] = useState<RateLimitInfo | null>(null)
   const rateLimitRef = useRef<Record<string, RateLimitEntry>>({})
 
+  const vipEmailRef = useRef<string | null>(null)
   const applyTokens = useCallback((tokens: AuthTokens, resolvedUser: AuthUser) => {
     authTokenStore.setTokens(tokens)
     setUser(resolvedUser)
@@ -87,6 +88,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setRateLimit(buildRateLimitInfo(entry))
         throw new Error('Too many failed attempts. Wait for the cooldown.')
       }
+      vipEmailRef.current = values.email
       setIsPending(true)
       try {
         const result = await authService.login(values)
@@ -118,11 +120,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       try {
         const response = await authService.verifyMfa(code, mfaChallenge.challengeId)
         applyTokens(response.tokens, response.user)
+        if (vipEmailRef.current) {
+          clearRateLimit(vipEmailRef.current)
+        }
       } finally {
         setIsPending(false)
       }
     },
-    [mfaChallenge, applyTokens],
+    [mfaChallenge, applyTokens, clearRateLimit],
   )
 
   const resendTotp = useCallback(async () => {
