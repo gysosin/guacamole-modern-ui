@@ -40,3 +40,9 @@ export interface PasswordResetPayload {
   code: string
   password: string
 }
+
+export interface DevAuthInfo {
+  secret: string
+  currentCode: string
+  backupCodes: string[]
+}

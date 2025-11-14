@@ -7,6 +7,7 @@ import type {
   PasswordResetPayload,
   WebAuthnChallenge,
 } from '@types/auth'
+import type { DevAuthInfo } from '@types/auth'
 
 export interface RateLimitInfo {
   isLocked: boolean
@@ -33,6 +34,7 @@ export interface AuthContextValue {
   requestPasswordReset: (email: string) => Promise<void>
   verifyPasswordReset: (payload: { email: string; code: string }) => Promise<void>
   completePasswordReset: (payload: PasswordResetPayload) => Promise<void>
+  fetchDevInfo: () => Promise<DevAuthInfo>
 }
 
 export const FALLBACK_USER: AuthUser = {
@@ -60,6 +62,7 @@ export const createDefaultAuthValue = (): AuthContextValue => ({
   requestPasswordReset: async () => undefined,
   verifyPasswordReset: async () => undefined,
   completePasswordReset: async () => undefined,
+  fetchDevInfo: async () => ({ secret: '', currentCode: '', backupCodes: [] }),
 })
 
 export const AuthContext = createContext<AuthContextValue>(createDefaultAuthValue())

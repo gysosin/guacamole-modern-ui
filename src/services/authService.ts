@@ -6,6 +6,7 @@ import { toDataURL } from 'qrcode'
 import type {
   AuthTokens,
   AuthUser,
+  DevAuthInfo,
   LoginCredentials,
   MfaChallenge,
   MfaSetupInfo,
@@ -137,6 +138,12 @@ const mockState = {
   webAuthn: null as WebAuthnChallenge | null,
 }
 
+const buildDevInfo = (): DevAuthInfo => ({
+  secret: mockState.totpSecret,
+  currentCode: authenticator.generate(mockState.totpSecret),
+  backupCodes: [...mockState.backupCodes],
+})
+
 tokenStore.setTokens(mockState.tokens)
 
 const mockAdapter: AxiosAdapter = async (config) => {
@@ -241,6 +248,10 @@ const mockAdapter: AxiosAdapter = async (config) => {
       secret: mockState.totpSecret,
       backupCodes: mockState.backupCodes,
     })
+  }
+
+  if (normalizedUrl === 'mfa/dev-info' && method === 'get') {
+    return response<DevAuthInfo>(buildDevInfo())
   }
 
   if (normalizedUrl === 'mfa/setup/verify' && method === 'post') {
@@ -422,6 +433,7 @@ export const authService = {
   fetchMfaSetup: () => authClient.get<MfaSetupInfo>('/mfa/setup').then((res) => res.data),
   verifySetupTotp: (code: string) =>
     authClient.post('/mfa/setup/verify', { code }).then((res) => res.data),
+  fetchDevInfo: () => authClient.get<DevAuthInfo>('/mfa/dev-info').then((res) => res.data),
   regenerateBackupCodes: () =>
     authClient.post<string[]>('/mfa/backup-codes/regenerate').then((res) => res.data),
   fetchBackupCodes: () => authClient.get<string[]>('/mfa/backup-codes').then((res) => res.data),

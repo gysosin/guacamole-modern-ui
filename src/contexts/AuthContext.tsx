@@ -149,6 +149,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const verifySetupTotp = useCallback((code: string) => authService.verifySetupTotp(code), [])
   const regenerateBackupCodes = useCallback(() => authService.regenerateBackupCodes(), [])
   const fetchBackupCodes = useCallback(() => authService.fetchBackupCodes(), [])
+  const fetchDevInfo = useCallback(() => authService.fetchDevInfo(), [])
   const requestWebAuthnChallenge = useCallback(() => authService.requestWebAuthnChallenge(), [])
   const verifyWebAuthn = useCallback(
     (assertion: unknown) => authService.verifyWebAuthnAssertion(assertion),
@@ -186,6 +187,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       fetchBackupCodes,
       requestWebAuthnChallenge,
       verifyWebAuthn,
+      fetchDevInfo,
       requestPasswordReset,
       verifyPasswordReset,
       completePasswordReset,
@@ -207,6 +209,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       fetchBackupCodes,
       requestWebAuthnChallenge,
       verifyWebAuthn,
+      fetchDevInfo,
       requestPasswordReset,
       verifyPasswordReset,
       completePasswordReset,
