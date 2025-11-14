@@ -50,7 +50,12 @@ export const Sidebar = ({
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Primary</Text>
           {isMobile && (
-            <button type="button" style={styles.closeButton} onClick={onClose} aria-label="Close navigation">
+            <button
+              type="button"
+              style={styles.closeButton}
+              onClick={onClose}
+              aria-label="Close navigation"
+            >
               ✕
             </button>
           )}
@@ -68,7 +73,10 @@ export const Sidebar = ({
                   onNavigate()
                 }}
               >
-                <View style={isActive ? styles.navItemActive : styles.navItem} aria-current={isActive ? 'page' : undefined}>
+                <View
+                  style={isActive ? styles.navItemActive : styles.navItem}
+                  aria-current={isActive ? 'page' : undefined}
+                >
                   <Text style={styles.navLabel}>{route.label}</Text>
                   <Text style={styles.navSubtext}>{route.short}</Text>
                 </View>

@@ -10,10 +10,17 @@ const ConnectionsPage = lazy(() => import('@pages/ConnectionsPage'))
 const SessionsPage = lazy(() => import('@pages/SessionsPage'))
 const SettingsPage = lazy(() => import('@pages/SettingsPage'))
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'))
+const LoginPage = lazy(() => import('@pages/auth/LoginPage'))
+const MfaPage = lazy(() => import('@pages/auth/MfaPage'))
+const PasswordResetPage = lazy(() => import('@pages/auth/PasswordResetPage'))
 
 export const AppRoutes = () => (
   <Suspense fallback={<RoutesFallback />}>
     <Routes>
+      <Route path="/auth" element={<Navigate to="/auth/login" replace />} />
+      <Route path="/auth/login" element={<LoginPage />} />
+      <Route path="/auth/mfa" element={<MfaPage />} />
+      <Route path="/auth/reset" element={<PasswordResetPage />} />
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route
         path="/dashboard"
