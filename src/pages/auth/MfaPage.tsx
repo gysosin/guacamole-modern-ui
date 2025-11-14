@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Text, View } from 'react-bits'
 import { useTheme } from '@hooks/useTheme'
@@ -9,7 +10,27 @@ import { MfaSetupWizard } from '@components/auth/MfaSetupWizard'
 const MfaPage = () => {
   const navigate = useNavigate()
   const { tokens } = useTheme()
-  const { verifyMfa, resendTotp, mfaChallenge } = useAuth()
+  const { verifyMfa, resendTotp, mfaChallenge, fetchDevInfo } = useAuth()
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) {
+      return
+    }
+    let mounted = true
+    fetchDevInfo()
+      .then((info) => {
+        if (!mounted) return
+        console.info('MFA Dev secret', info.secret)
+        console.info('Current TOTP code', info.currentCode)
+        console.info('Backup codes', info.backupCodes)
+      })
+      .catch(() => {
+        /* ignore */
+      })
+    return () => {
+      mounted = false
+    }
+  }, [fetchDevInfo])
 
   const handleVerify = async (code: string) => {
     await verifyMfa(code)
