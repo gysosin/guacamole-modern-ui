@@ -1,0 +1,2 @@
+patchedDependencies:
+  react-bits: patches/react-bits.patch

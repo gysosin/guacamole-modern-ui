@@ -1,0 +1,25 @@
+diff --git a/es/modules/Touchable.js b/es/modules/Touchable.js
+index 2a2e3226b9c7f9c53d5b24d55caae28f4d7c3c8f..8de81da40d53650277cd09dc020c35eae84dd88c 100644
+--- a/es/modules/Touchable.js
++++ b/es/modules/Touchable.js
+@@ -1,7 +1,7 @@
+ import * as React from 'react';
+ import * as PropTypes from 'prop-types';
+ import * as TimerMixin from 'react-timer-mixin';
+-import * as createReactClass from 'create-react-class';
++import createReactClass from 'create-react-class';
+ import { throttle } from '../util/throttle';
+ var ensurePositiveDelayProps = function (_props) {
+ };
+diff --git a/es/vr/Touchable.js b/es/vr/Touchable.js
+index 0610810fab1a1255ea87c4dcca8f32bdb02dbada..3493dde3de30249092a7cee29027487b9ab0a37d 100644
+--- a/es/vr/Touchable.js
++++ b/es/vr/Touchable.js
+@@ -1,6 +1,6 @@
+ import * as React from 'react';
+ import * as PropTypes from 'prop-types';
+-import * as createReactClass from 'create-react-class';
++import createReactClass from 'create-react-class';
+ import { VrButton } from 'react-vr';
+ import { throttle } from '../util/throttle';
+ var InsetPropType = PropTypes.shape({

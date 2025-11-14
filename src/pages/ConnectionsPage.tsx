@@ -74,3 +74,5 @@ const createStyles = (tokens: ThemeTokens): Record<string, CSSProperties> => ({
     color: tokens.palette.textSecondary,
   },
 })
+
+export default ConnectionsPage

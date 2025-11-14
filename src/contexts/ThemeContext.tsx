@@ -1,5 +1,6 @@
 import { PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react'
-import { ThemeMode, getThemeTokens } from '@theme/theme'
+import type { ThemeMode } from '@theme/theme'
+import { getThemeTokens } from '@theme/theme'
 import { getInitialThemeMode, THEME_STORAGE_KEY, ThemeContext } from './theme-context.core'
 
 export const ThemeProvider = ({ children }: PropsWithChildren) => {
