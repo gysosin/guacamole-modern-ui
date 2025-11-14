@@ -55,7 +55,7 @@ export const MfaSetupWizard = () => {
       setStatusMessage('Authenticator linked successfully.')
       setStepIndex((prev) => (prev < 2 ? 2 : prev))
       setCode('')
-    } catch {
+    } catch (error) {
       setStatusMessage((error as Error).message ?? 'Verification failed. Try again.')
     } finally {
       setIsCodeVerifying(false)
@@ -88,7 +88,7 @@ export const MfaSetupWizard = () => {
       setWebAuthnStatus('success')
       setStatusMessage('WebAuthn device registered.')
       setStepIndex((prev) => (prev < 3 ? 3 : prev))
-    } catch {
+    } catch (error) {
       console.error('WebAuthn', error)
       setWebAuthnStatus('error')
       setStatusMessage('WebAuthn registration failed. Try another key or skip it.')
@@ -101,7 +101,8 @@ export const MfaSetupWizard = () => {
       setBackupCodes(codes)
       setStatusMessage('Backup codes refreshed and ready for download.')
       setStepIndex(3)
-    } catch {
+    } catch (error) {
+      console.error('Backup code refresh failed', error)
       setStatusMessage('Unable to regenerate backup codes. Retry in a moment.')
     }
   }, [regenerateBackupCodes])
