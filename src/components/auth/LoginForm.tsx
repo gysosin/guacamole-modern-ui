@@ -14,6 +14,7 @@ export interface LoginFormValues {
 export interface LoginFormProps {
   initialValues?: Partial<LoginFormValues>
   isSubmitting?: boolean
+  submissionError?: string
   onSubmit?: (values: LoginFormValues) => Promise<void> | void
   onForgotPasswordNavigate?: () => void
   title?: string
@@ -36,6 +37,7 @@ const DEFAULT_VALUES: LoginFormValues = {
 export const LoginForm = ({
   initialValues,
   isSubmitting = false,
+  submissionError,
   onSubmit,
   onForgotPasswordNavigate,
   title = 'Welcome back',
@@ -49,10 +51,11 @@ export const LoginForm = ({
     email: false,
     password: false,
   })
-  const [submissionError, setSubmissionError] = useState<string | null>(null)
+  const [localError, setLocalError] = useState<string | null>(null)
   const [successPulse, setSuccessPulse] = useState(false)
 
   const errors = useMemo(() => validate(values), [values])
+  const displayedError = submissionError ?? localError
 
   const handleBlur = (field: FieldName) => {
     setTouched((prev) => ({ ...prev, [field]: true }))
@@ -69,7 +72,7 @@ export const LoginForm = ({
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setTouched({ email: true, password: true })
-    setSubmissionError(null)
+    setLocalError(null)
 
     const hasErrors = Boolean(errors.email || errors.password)
     if (hasErrors) {
@@ -83,7 +86,7 @@ export const LoginForm = ({
       setTimeout(() => setSuccessPulse(false), 800)
     } catch (error) {
       console.error(error)
-      setSubmissionError('Unable to sign in. Check your credentials or try again later.')
+      setLocalError('Unable to sign in. Check your credentials or try again later.')
       setSuccessPulse(false)
     }
   }
@@ -107,6 +110,7 @@ export const LoginForm = ({
         onBlur={() => handleBlur('email')}
         onChange={handleChange}
         tokens={tokens}
+        disabled={isSubmitting}
       />
 
       <FloatingLabelField
@@ -121,6 +125,7 @@ export const LoginForm = ({
         onBlur={() => handleBlur('password')}
         onChange={handleChange}
         tokens={tokens}
+        disabled={isSubmitting}
       />
 
       <View style={styles.controls}>
@@ -145,14 +150,22 @@ export const LoginForm = ({
         </button>
       </View>
 
-      {submissionError ? (
+      {displayedError ? (
         <View style={styles.formError} role="alert">
-          <Text style={styles.formErrorText}>{submissionError}</Text>
+          <Text style={styles.formErrorText}>{displayedError}</Text>
         </View>
       ) : null}
 
-      <button type="submit" disabled={isSubmitting} style={styles.submitButton}>
-        {isSubmitting ? 'Securing session…' : 'Sign in'}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        style={{
+          ...styles.submitButton,
+          opacity: isSubmitting ? 0.75 : 1,
+          cursor: isSubmitting ? 'wait' : 'pointer',
+        }}
+      >
+        {isSubmitting ? 'Signing in…' : 'Sign in'}
       </button>
 
       <View style={styles.helper}>
@@ -187,6 +200,7 @@ interface FloatingLabelFieldProps {
   onBlur: () => void
   onChange: (event: ChangeEvent<HTMLInputElement>) => void
   tokens: ThemeTokens
+  disabled?: boolean
 }
 
 const FloatingLabelField = ({
@@ -201,6 +215,7 @@ const FloatingLabelField = ({
   onBlur,
   onChange,
   tokens,
+  disabled = false,
 }: FloatingLabelFieldProps) => {
   const [focused, setFocused] = useState(false)
   const styles = useMemo(() => createFieldStyles(tokens), [tokens])
@@ -232,9 +247,11 @@ const FloatingLabelField = ({
                   ? tokens.palette.success
                   : tokens.palette.border,
             boxShadow: focused ? `0 0 0 2px ${tokens.palette.accent}33` : 'none',
+            cursor: disabled ? 'not-allowed' : 'text',
           }}
           aria-invalid={Boolean(error && touched)}
           aria-describedby={error ? `${id}-error` : undefined}
+          disabled={disabled}
         />
         <label
           htmlFor={id}
