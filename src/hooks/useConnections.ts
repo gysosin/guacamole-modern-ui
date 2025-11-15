@@ -1,10 +1,6 @@
 import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type {
-  ConnectionInput,
-  Connection,
-  ConnectionUpdatePayload,
-} from '@types/connections'
+import type { Connection } from '@types/connections'
 import { connectionsService } from '@services/connectionsService'
 
 export const useConnections = () => {

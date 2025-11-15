@@ -41,7 +41,7 @@ export interface ConnectionInput {
 
 export interface ConnectionUpdatePayload {
   id: string
-  payload: Partial<ConnectionInput>
+  payload: Partial<Connection>
 }
 
 export const DEFAULT_CONNECTION_SETTINGS: ConnectionSettings = {

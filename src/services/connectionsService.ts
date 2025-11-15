@@ -1,10 +1,5 @@
-import type {
-  Connection,
-  ConnectionInput,
-  ConnectionUpdatePayload,
-  DEFAULT_CONNECTION_SETTINGS,
-  DEFAULT_CONNECTIONS,
-} from '@types/connections'
+import type { Connection, ConnectionInput, ConnectionUpdatePayload } from '@types/connections'
+import { DEFAULT_CONNECTION_SETTINGS, DEFAULT_CONNECTIONS } from '@types/connections'
 
 const STORAGE_KEY = 'guacmod:connections'
 const NETWORK_DELAY_MS = 260
@@ -46,7 +41,8 @@ const persistConnections = (connections: Connection[]) => {
 let connectionStore = getStoredConnections()
 
 const buildId = () => {
-  const cryptoSource = globalThis.crypto ?? (globalThis as typeof globalThis & { msCrypto?: Crypto }).msCrypto
+  const cryptoSource =
+    globalThis.crypto ?? (globalThis as typeof globalThis & { msCrypto?: Crypto }).msCrypto
   if (cryptoSource?.randomUUID) {
     return cryptoSource.randomUUID()
   }
